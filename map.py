@@ -32,8 +32,6 @@ class GameSprite(pygame.sprite.Sprite):
 class Camera():
     def __init__(self):
         self.speed = 10
-        self.x = 0
-        self.y = 0
     def movement(self):
         keys_input = pygame.key.get_pressed()
         for line in world_map:
