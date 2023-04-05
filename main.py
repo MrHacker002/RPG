@@ -31,8 +31,8 @@ while game:
     sc.fill(BLACK)
     map_drawing(world_map, plant_map, tileSize, camera, sc_w, sc_h, sc)
     hero.draw()
-    hero.move(mouse_pos_x, mouse_pos_y)
-    camera.movement(mouse_pos_x, mouse_pos_y, hero)
+    hero.move(camera.mouse_x, camera.mouse_y)
+    camera.movement(hero)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -40,6 +40,7 @@ while game:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 3:
                 mouse_pos_x, mouse_pos_y = event.pos
+                camera.new_mouse_pos(mouse_pos_x, mouse_pos_y)
                 hero.is_moving = True
     pygame.display.update()
     clock.tick()

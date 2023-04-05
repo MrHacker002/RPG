@@ -20,24 +20,29 @@ class Camera():
     def __init__(self,x,y):
         self.speed = 15
         self.rect = pygame.Rect(x,y,0,0)
-    def movement(self, mouse_pos_x, mouse_pos_y, player):
+        self.mouse_x = 0
+        self.mouse_y = 0
+    def movement(self,player):
         keys_input = pygame.key.get_pressed()
         if keys_input[pygame.K_w] and self.rect.top > 0:
             self.rect.y += self.speed * -1
             player.rect.y += self.speed
-            # mouse_pos_y += self.speed * -1
+            self.mouse_y += self.speed
         if keys_input[pygame.K_s] and self.rect.bottom < world_map_h-sc_h:
             self.rect.y += self.speed
             player.rect.y += self.speed * -1
-            mouse_pos_y += self.speed * -1
+            self.mouse_y += self.speed * -1
         if keys_input[pygame.K_d] and self.rect.right < world_map_w-sc_w:
             self.rect.x += self.speed
             player.rect.x += self.speed * -1
-            mouse_pos_x += self.speed
+            self.mouse_x += self.speed * -1
         if keys_input[pygame.K_a] and self.rect.left > 0:
             self.rect.x += self.speed*-1
             player.rect.x += self.speed
-            # mouse_pos_x += self.speed * -1
+            self.mouse_x += self.speed
+    def new_mouse_pos(self, new_mouse_x,new_mouse_y):
+        self.mouse_x = new_mouse_x
+        self.mouse_y = new_mouse_y
 
 class Player(GameSprite):
     def __init__(self, x, y, width, height, image,sc, speed):
