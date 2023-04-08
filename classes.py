@@ -1,7 +1,8 @@
 import pygame
 import os
+import math
 from map import *
-from assets import player_img
+from assets import player_img, enemy_img, heart_img, heart2_img, heart3_img
 
 
 class GameSprite(pygame.sprite.Sprite):
@@ -15,6 +16,7 @@ class GameSprite(pygame.sprite.Sprite):
         self.sc.blit(self.image, (self.rect.x, self.rect.y))
     # def draw_sur(self,surface):
     #     surface.blit(self.image, (self.rect.x, self.rect.y))
+# enemy = Enemy(500,300,100,100,enemy_img,sc,20,hero)
 
 class Camera():
     def __init__(self,x,y):
@@ -45,7 +47,7 @@ class Camera():
         self.mouse_y = new_mouse_y
 
 class Player(GameSprite):
-    def __init__(self, x, y, width, height, image,sc, speed):
+    def __init__(self, x, y, width, height, image,sc, speed, hp, max_hp):
         super().__init__(x, y, width, height, image, sc)
         self.speed = speed
         self.speed_x = 0
@@ -55,6 +57,8 @@ class Player(GameSprite):
         self.dist_y = 0
         self.frames = 0
         self.race = None
+        self.hp = hp
+        self.max_hp = hp
     def move(self, mouse_pos_x, mouse_pos_y):
         if self.is_moving:
             if self.rect.x < mouse_pos_x:
@@ -91,6 +95,16 @@ class Player(GameSprite):
             self.dist_y = 0
             self.speed_x = 0
             self.speed_y = 0
+    def health(self,sc):
+        amount_half_hearts = self.hp/2
+        half_heart_exists = amount_half_hearts - int(amount_half_hearts) != 0
+        for heart in range(int(self.max_hp/2)):
+            if int(amount_half_hearts) > heart:
+                sc.blit(pygame.transform.scale(heart_img, (40,40)), (500+heart*40,0))
+            elif half_heart_exists and int(amount_half_hearts) == heart and self.hp >= 0:
+                sc.blit(pygame.transform.scale(heart2_img, (40,40)), (500+heart*40,0))
+            else:
+                sc.blit(pygame.transform.scale(heart3_img, (40,40)), (500+heart*40,0))
 
 class Inventory:
     pass
