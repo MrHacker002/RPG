@@ -2,7 +2,7 @@ import pygame
 import os
 import math
 from map import *
-from assets import player_img, enemy_img, heart_img, heart2_img, heart3_img
+from assets import player_img, heart_img, heart2_img, heart3_img
 
 
 class GameSprite(pygame.sprite.Sprite):
