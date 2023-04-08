@@ -16,7 +16,6 @@ class GameSprite(pygame.sprite.Sprite):
         self.sc.blit(self.image, (self.rect.x, self.rect.y))
     # def draw_sur(self,surface):
     #     surface.blit(self.image, (self.rect.x, self.rect.y))
-# enemy = Enemy(500,300,100,100,enemy_img,sc,20,hero)
 
 class Camera():
     def __init__(self,x,y):
