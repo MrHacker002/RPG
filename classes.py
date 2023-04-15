@@ -2,7 +2,8 @@ import pygame
 import os
 import math
 from map import *
-from assets import player_img, heart_img, heart2_img, heart3_img
+from assets import player_img, enemy_img, heart_img, heart2_img, heart3_img
+from settings import tileSize
 
 
 class GameSprite(pygame.sprite.Sprite):
@@ -16,6 +17,7 @@ class GameSprite(pygame.sprite.Sprite):
         self.sc.blit(self.image, (self.rect.x, self.rect.y))
     # def draw_sur(self,surface):
     #     surface.blit(self.image, (self.rect.x, self.rect.y))
+# enemy = Enemy(500,300,100,100,enemy_img,sc,20,hero)
 
 class Camera():
     def __init__(self,x,y):
@@ -23,23 +25,27 @@ class Camera():
         self.rect = pygame.Rect(x,y,0,0)
         self.mouse_x = 0
         self.mouse_y = 0
-    def movement(self,player):
+    def movement(self,player,enemy):
         keys_input = pygame.key.get_pressed()
         if keys_input[pygame.K_w] and self.rect.top > 0:
             self.rect.y += self.speed * -1
             player.rect.y += self.speed
+            enemy.rect.y += self.speed
             self.mouse_y += self.speed
         if keys_input[pygame.K_s] and self.rect.bottom < world_map_h-sc_h:
             self.rect.y += self.speed
             player.rect.y += self.speed * -1
+            enemy.rect.y += self.speed * -1
             self.mouse_y += self.speed * -1
         if keys_input[pygame.K_d] and self.rect.right < world_map_w-sc_w:
             self.rect.x += self.speed
             player.rect.x += self.speed * -1
+            enemy.rect.x += self.speed * -1
             self.mouse_x += self.speed * -1
         if keys_input[pygame.K_a] and self.rect.left > 0:
             self.rect.x += self.speed*-1
             player.rect.x += self.speed
+            enemy.rect.x += self.speed
             self.mouse_x += self.speed
     def new_mouse_pos(self, new_mouse_x,new_mouse_y):
         self.mouse_x = new_mouse_x
@@ -105,6 +111,31 @@ class Player(GameSprite):
             else:
                 sc.blit(pygame.transform.scale(heart3_img, (40,40)), (500+heart*40,0))
 
+class Enemy(GameSprite):
+    def __init__(self,x,y,width,height,image,sc,speed,hp, player):
+        super().__init__(x,y,width,height,image,sc)
+        self.speed = speed
+        self.hp = hp
+        self.max_hp = self.hp
+        self.player = player
+    def movement(self):
+        dist_x = self.player.rect.x - self.rect.x
+        dist_y = self.player.rect.y - self.rect.y
+        distance = (dist_x ** 2 + dist_y ** 2)**0.5
+        if distance != 0:
+            if (dist_x > 0 and dist_x <= 400) and (dist_y > 0 and dist_y <= 400):
+                self.rect.x += self.speed * dist_x / distance
+                self.rect.y += self.speed * dist_y / distance
+            if (dist_x < 0 and dist_x >= -400) and (dist_y < 0 and dist_y >= -400):
+                self.rect.x += self.speed * dist_x / distance
+                self.rect.y += self.speed * dist_y / distance
+            if (dist_x > 0 and dist_x <= 400) and (dist_y < 0 and dist_y >= -400):
+                self.rect.x += self.speed * dist_x / distance
+                self.rect.y += self.speed * dist_y / distance
+            if (dist_x < 0 and dist_x >= -400) and (dist_y > 0 and dist_y <= 400):
+                self.rect.x += self.speed * dist_x / distance
+                self.rect.y += self.speed * dist_y / distance
+            
 class Inventory:
     pass
             
