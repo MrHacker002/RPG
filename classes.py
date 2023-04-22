@@ -2,7 +2,7 @@ import pygame
 import os
 import math
 from map import *
-from assets import player_img, enemy_img, heart_img, heart2_img, heart3_img
+from assets import player_img, enemy_img, heart_img, heart2_img, heart3_img, house2_img
 from settings import tileSize
 
 
@@ -25,27 +25,43 @@ class Camera():
         self.rect = pygame.Rect(x,y,0,0)
         self.mouse_x = 0
         self.mouse_y = 0
-    def movement(self,player,enemy):
+    def movement(self,player,enemy,houses,rocks):
         keys_input = pygame.key.get_pressed()
         if keys_input[pygame.K_w] and self.rect.top > 0:
             self.rect.y += self.speed * -1
             player.rect.y += self.speed
             enemy.rect.y += self.speed
+            for house in houses:
+                house.rect.y += self.speed
+            for rock in rocks:
+                rock.rect.y += self.speed
             self.mouse_y += self.speed
         if keys_input[pygame.K_s] and self.rect.bottom < world_map_h-sc_h:
             self.rect.y += self.speed
             player.rect.y += self.speed * -1
             enemy.rect.y += self.speed * -1
+            for house in houses:
+                house.rect.y += self.speed * -1
+            for rock in rocks:
+                rock.rect.y += self.speed * -1
             self.mouse_y += self.speed * -1
         if keys_input[pygame.K_d] and self.rect.right < world_map_w-sc_w:
             self.rect.x += self.speed
             player.rect.x += self.speed * -1
             enemy.rect.x += self.speed * -1
+            for house in houses:
+                house.rect.x += self.speed * -1
+            for rock in rocks:
+                rock.rect.x += self.speed * -1
             self.mouse_x += self.speed * -1
         if keys_input[pygame.K_a] and self.rect.left > 0:
             self.rect.x += self.speed*-1
             player.rect.x += self.speed
             enemy.rect.x += self.speed
+            for house in houses:
+                house.rect.x += self.speed
+            for rock in rocks:
+                rock.rect.x += self.speed
             self.mouse_x += self.speed
     def new_mouse_pos(self, new_mouse_x,new_mouse_y):
         self.mouse_x = new_mouse_x
@@ -105,11 +121,11 @@ class Player(GameSprite):
         half_heart_exists = amount_half_hearts - int(amount_half_hearts) != 0
         for heart in range(int(self.max_hp/2)):
             if int(amount_half_hearts) > heart:
-                sc.blit(pygame.transform.scale(heart_img, (40,40)), (500+heart*40,0))
+                sc.blit(pygame.transform.scale(heart_img, (40,40)), (590+heart*40,0))
             elif half_heart_exists and int(amount_half_hearts) == heart and self.hp >= 0:
-                sc.blit(pygame.transform.scale(heart2_img, (40,40)), (500+heart*40,0))
+                sc.blit(pygame.transform.scale(heart2_img, (40,40)), (590+heart*40,0))
             else:
-                sc.blit(pygame.transform.scale(heart3_img, (40,40)), (500+heart*40,0))
+                sc.blit(pygame.transform.scale(heart3_img, (40,40)), (590+heart*40,0))
 
 class Enemy(GameSprite):
     def __init__(self,x,y,width,height,image,sc,speed,hp, player):
